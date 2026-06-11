@@ -4,11 +4,10 @@ import math
 
 pygame.init()
 
-WIDTH, HEIGHT = 600, 700
+WIDTH, HEIGHT = 1280, 720
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Catch the Orange")
 
-# Colors
 SKY_TOP       = (74, 184, 240)
 SKY_BOT       = (135, 206, 235)
 WHITE         = (255, 255, 255)
@@ -36,7 +35,6 @@ font_med   = pygame.font.SysFont("Arial", 20)
 font_small = pygame.font.SysFont("Arial", 15)
 
 
-# ── helpers ──────────────────────────────────────────────────────────────────
 
 def draw_gradient_bg(surface):
     for y in range(HEIGHT):
@@ -195,7 +193,6 @@ def draw_title_screen(surface, score=None):
     surface.blit(prompt, (WIDTH // 2 - prompt.get_width() // 2, 400))
 
 
-# ── clouds ────────────────────────────────────────────────────────────────────
 
 class Cloud:
     def __init__(self, offscreen=False):
@@ -214,7 +211,6 @@ class Cloud:
         draw_cloud(surface, self.x, self.y, self.r)
 
 
-# ── particles ─────────────────────────────────────────────────────────────────
 
 class Particle:
     def __init__(self, x, y):
@@ -242,7 +238,6 @@ class Particle:
         surface.blit(s, (int(self.x) - self.r, int(self.y) - self.r))
 
 
-# ── title screen clouds (static list) ────────────────────────────────────────
 
 title_clouds = [
     (80,  80,  38),
@@ -253,7 +248,6 @@ title_clouds = [
 ]
 
 
-# ── main ──────────────────────────────────────────────────────────────────────
 
 def main():
     game_state = "title"  # "title" | "playing" | "gameover"
@@ -277,7 +271,6 @@ def main():
     while True:
         clock.tick(60)
 
-        # ── events ────────────────────────────────────────────────────────────
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -299,13 +292,11 @@ def main():
                     speed       = 2.2
                     spawn_timer = 0
 
-        # ── title / gameover screen ────────────────────────────────────────────
         if game_state in ("title", "gameover"):
             draw_title_screen(screen, final_score if game_state == "gameover" else None)
             pygame.display.flip()
             continue
 
-        # ── playing ────────────────────────────────────────────────────────────
 
         # paddle follows mouse, clamped
         mouse_x = pygame.mouse.get_pos()[0]
@@ -357,7 +348,6 @@ def main():
         for cl in clouds:
             cl.update()
 
-        # ── draw ──────────────────────────────────────────────────────────────
         draw_gradient_bg(screen)
         draw_sunbeams(screen)
         for cl in clouds:
