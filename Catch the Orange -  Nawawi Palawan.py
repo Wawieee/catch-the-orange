@@ -76,7 +76,6 @@ def draw_orange(surface, x, y, r, rotation=0):
                         (r // 2, r // 2, r * 3, r))
     surface.blit(shadow_surf, (ix - r + r // 2, iy + int(r * 0.6)))
 
-    # body — layered circles for faux radial gradient
     for i, (col, radius_factor) in enumerate([
         (ORANGE_DARK,  1.0),
         (ORANGE_MID,   0.82),
@@ -87,18 +86,15 @@ def draw_orange(surface, x, y, r, rotation=0):
         oy = int(-r * 0.28 * (1 - radius_factor / 1.0))
         pygame.draw.circle(surface, col, (ix + ox, iy + oy), cr)
 
-    # specular highlight
     hl_surf = pygame.Surface((r, r), pygame.SRCALPHA)
     pygame.draw.ellipse(hl_surf, (255, 255, 255, 90),
                         (0, 0, int(r * 0.55), int(r * 0.38)))
     surface.blit(hl_surf, (ix - int(r * 0.52), iy - int(r * 0.52)))
 
-    # stem
     stem_x, stem_y = ix + 1, iy - r
     pygame.draw.line(surface, STEM_BROWN,
                      (stem_x, stem_y), (stem_x + 2, stem_y - 7), 2)
 
-    # leaf (rotated ellipse approximated by polygon)
     lx, ly = stem_x + 6, stem_y - 5
     leaf_pts = []
     for a in range(12):
@@ -113,23 +109,19 @@ def draw_basket(surface, x, y):
     bw, bh = PADDLE_WIDTH, PADDLE_HEIGHT
     ix, iy = int(x), int(y)
 
-    # trapezoid body
     pts = [(ix, iy), (ix + bw, iy), (ix + bw - 7, iy + bh), (ix + 7, iy + bh)]
     pygame.draw.polygon(surface, BASKET_DARK, pts)
 
-    # weave horizontal lines
     for i in range(1, 4):
         yy = iy + (bh * i) // 4
         pygame.draw.line(surface, (0, 0, 0, 60),
                          (ix + i * 2, yy), (ix + bw - i * 2, yy), 1)
 
-    # weave diagonal lines
     for i in range(-2, 9):
         sx = ix + i * 13
         pygame.draw.line(surface, (0, 0, 0, 45),
                          (sx, iy), (sx + int(bh * 0.55), iy + bh), 1)
 
-    # lighter gradient overlay on top half
     for row in range(bh // 2):
         alpha = int(60 * (1 - row / (bh / 2)))
         t = row / (bh / 2)
@@ -140,14 +132,12 @@ def draw_basket(surface, x, y):
         right = ix + bw - int(row * 7 / bh)
         pygame.draw.line(surface, (r, g, b), (left, iy + row), (right, iy + row))
 
-    # rim
     rim_rect = pygame.Rect(ix - 3, iy - 5, bw + 6, 9)
     pygame.draw.rect(surface, RIM_COLOR, rim_rect, border_radius=4)
     pygame.draw.rect(surface, BASKET_DARK, rim_rect, width=1, border_radius=4)
 
 
 def draw_hud(surface, score, lives):
-    # panel
     hud = pygame.Surface((150, 58), pygame.SRCALPHA)
     pygame.draw.rect(hud, (10, 50, 100, 155), hud.get_rect(), border_radius=10)
     surface.blit(hud, (8, 8))
@@ -157,7 +147,6 @@ def draw_hud(surface, score, lives):
     val = font_big.render(str(score), True, HUD_TEXT)
     surface.blit(val, (20, 32))
 
-    # life oranges
     for i in range(3):
         alive = i < lives
         col = ORANGE_MID if alive else (120, 120, 120)
@@ -250,7 +239,7 @@ title_clouds = [
 
 
 def main():
-    game_state = "title"  # "title" | "playing" | "gameover"
+    game_state = "title" 
     final_score = None
 
     # game vars
@@ -265,7 +254,6 @@ def main():
     spawn_timer = 0
     rotations = {}
 
-    # bg surface (redrawn each frame for clouds)
     pygame.mouse.set_visible(False)
 
     while True:
@@ -298,7 +286,6 @@ def main():
             continue
 
 
-        # paddle follows mouse, clamped
         mouse_x = pygame.mouse.get_pos()[0]
         paddle_x = mouse_x - PADDLE_WIDTH // 2
         paddle_x = max(0, min(WIDTH - PADDLE_WIDTH, paddle_x))
@@ -312,7 +299,6 @@ def main():
             rotations[id(balls[-1])] = 0.0
             spawn_timer = 0
 
-        # update balls
         new_balls = []
         for ball in balls:
             ball[1] += speed
@@ -328,7 +314,6 @@ def main():
                 rotations.pop(bid, None)
                 continue
 
-            # missed
             if ball[1] - BALL_R > HEIGHT:
                 lives -= 1
                 rotations.pop(bid, None)
@@ -344,7 +329,6 @@ def main():
         for p in particles:
             p.update()
 
-        # update clouds
         for cl in clouds:
             cl.update()
 
@@ -363,7 +347,6 @@ def main():
         draw_basket(screen, paddle_x, paddle_y)
         draw_hud(screen, score, lives)
 
-        # custom cursor dot
         mx, my = pygame.mouse.get_pos()
         pygame.draw.circle(screen, (255, 255, 255, 180), (mx, my), 4)
 
