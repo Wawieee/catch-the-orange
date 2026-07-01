@@ -242,7 +242,6 @@ def main():
     game_state = "title" 
     final_score = None
 
-    # game vars
     paddle_x = WIDTH // 2 - PADDLE_WIDTH // 2
     paddle_y = HEIGHT - 40
     balls = []
@@ -290,7 +289,6 @@ def main():
         paddle_x = mouse_x - PADDLE_WIDTH // 2
         paddle_x = max(0, min(WIDTH - PADDLE_WIDTH, paddle_x))
 
-        # spawn
         spawn_timer += 1
         spawn_interval = max(18, int(40 - score * 0.25))
         if spawn_timer >= spawn_interval:
@@ -305,7 +303,6 @@ def main():
             bid = id(ball)
             rotations[bid] = rotations.get(bid, 0.0) + 0.04
 
-            # catch
             if (ball[1] + BALL_R >= paddle_y and
                     paddle_x + 5 < ball[0] < paddle_x + PADDLE_WIDTH - 5):
                 score += 1
@@ -324,7 +321,6 @@ def main():
         balls = new_balls
         speed = 2.2 + score * 0.045
 
-        # update particles
         particles = [p for p in particles if p.life > 0]
         for p in particles:
             p.update()
