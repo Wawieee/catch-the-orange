@@ -4,7 +4,7 @@ import math
 
 pygame.init()
 
-WIDTH, HEIGHT = 1280, 720
+WIDTH, HEIGHT = 540, 720
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Catch the Orange")
 
