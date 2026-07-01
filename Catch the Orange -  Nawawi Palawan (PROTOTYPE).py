@@ -45,7 +45,6 @@ def main():
         screen.fill(WHITE)
         clock.tick(60)
 
-        # Events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -66,7 +65,7 @@ def main():
 
         # Move and update balls
         for ball in balls[:]:
-            ball[1] += speed  # move down
+            ball[1] += speed 
 
             # Collision with paddle
             if (
